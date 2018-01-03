@@ -11,7 +11,12 @@ import static com.jogamp.opengl.GL2.*;
 abstract class RaceTrack {
     
     /** The width of one lane. The total width of the track is 4 * laneWidth. */
-    private final static float laneWidth = 1.22f;
+    protected final static float LANE_WIDTH = 1.22f;
+    
+    /**
+     * Number of lanes of the track
+     */
+    protected static final int  NR_LANES = 4;
     
     
     
@@ -19,6 +24,7 @@ abstract class RaceTrack {
      * Constructor for the default track.
      */
     public RaceTrack() {
+        
     }
 
 
