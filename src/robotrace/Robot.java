@@ -60,7 +60,7 @@ class Robot {
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim) {
         //draw torso neck and head
-        
+
         drawTorso(gl,glu,glut,tAnim);
         float armOffset = TORSO_WIDTH/2.0f + ARM_WIDTH/2.0f;
         float legOffset = TORSO_WIDTH/2.0f - LEG_WIDTH/2.0f;
@@ -72,12 +72,11 @@ class Robot {
         drawLeg(gl,glu,glut,tAnim,legOffset);
         //draw legt leg
         drawLeg(gl,glu,glut,tAnim,-legOffset);
-        
-        
+     
     }
     
     public void drawTorso(GL2 gl, GLU glu, GLUT glut, float tAnim){
-        this.material.setMaterial(gl);
+        this.material.setMaterial(gl);//TODO set material not working
         gl.glPushMatrix();
         
         gl.glScalef(TORSO_WIDTH,TORSO_THICKNESS,TORSO_HEIGHT);

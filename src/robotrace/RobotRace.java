@@ -2,6 +2,7 @@ package robotrace;
 
 import com.jogamp.opengl.GL2;
 import static com.jogamp.opengl.GL2.*;
+import java.util.Random;
 import static robotrace.ShaderPrograms.*;
 import static robotrace.Textures.*;
 
@@ -59,8 +60,23 @@ import static robotrace.Textures.*;
  * to the GLUT object.
  */
 public class RobotRace extends Base {
-    
+    //tolerance when comparing 2 doubles
     final double EPSILON = 1E-14;
+    
+    //number of robots
+    private static final int NR_ROBOTS = 4;
+    
+    //the distance traveled by the robots.
+    private double[] distance = new double[] {0,0,0,0};
+    
+    //speed of each robot
+    private double[] speed = new double[] {0.01,0.01,0.01,0.01};
+    
+    private static final double MIN_SPEED = 0.01;
+    private static final double MAX_SPEED = 0.015;
+    private static double prevTime;
+
+    
     
     /** Array of the four robots. */
     private final Robot[] robots;
@@ -79,6 +95,7 @@ public class RobotRace extends Base {
      * camera, track, and terrain.
      */
     public RobotRace() {
+        
         
         // Create a new array of four robots
         robots = new Robot[4];
@@ -239,11 +256,60 @@ public class RobotRace extends Base {
             drawAxisFrame();
         }
         
+        //set the position attributes for the robots
+        for(int i =0; i< NR_ROBOTS;i++){
+        
+            
+            distance[i] += speed[i]/5;
+            
+            if(distance[i] >= 1){
+                distance[i] -=Math.floor(distance[i]);
+                //afer 8 seconds we introduce variation in speed
+                if(gs.tAnim > 8){
+                    Random random = new Random();
+                    speed[i] = MIN_SPEED + (MAX_SPEED-MIN_SPEED)*random.nextDouble();
+                }
+                
+            }
+          
+           //set the robots position and direction.
+            robots[i].position = raceTracks[gs.trackNr].getLanePoint(i+1, distance[i]);
+            robots[i].direction = raceTracks[gs.trackNr].getLaneTangent(i+1, distance[i]);
+
+            }
+        
         // Draw the (first) robot.
         gl.glUseProgram(robotShader.getProgramID()); 
         
-        robots[0].draw(gl, glu, glut, gs.tAnim);
-       
+      
+        //position and draw the robots.
+        for(int i =0; i < NR_ROBOTS;i++){
+            gl.glPushMatrix();
+            //get the position on the track
+            double x = robots[i].position.x;
+            double y = robots[i].position.y;
+            double z = robots[i].position.z;
+            
+            //compute the rotation that have to be applied to the robots
+           
+            Vector direction = robots[i].direction.normalized();
+            double alpha;
+            if(robots[i].direction.x() >=0){
+                alpha = -Math.acos(direction.dot(Vector.Y));
+            }else{
+                alpha = Math.acos(direction.dot(Vector.Y));
+            }
+            
+            //pot the robot on track
+            gl.glTranslated(x, y, z+1.05);
+             //rotate the robot around z axis
+            gl.glRotated(Math.toDegrees(alpha), 0, 0, 1);
+            
+            
+            robots[i].draw(gl, glu, glut, gs.tAnim);
+            gl.glPopMatrix();  
+        }
+        
         
         // Draw the race track.
         gl.glUseProgram(trackShader.getProgramID());
@@ -319,47 +385,7 @@ public class RobotRace extends Base {
       
     }
  
-    /**
-     * Drawing hierarchy example.
-     * 
-     * This method draws an "arm" which can be animated using the sliders in the
-     * RobotRace interface. The A and B sliders rotate the different joints of
-     * the arm, while the C, D and E sliders set the R, G and B components of
-     * the color of the arm respectively. 
-     * 
-     * The way that the "arm" is drawn (by calling {@link #drawSecond()}, which 
-     * in turn calls {@link #drawThird()} imposes the following hierarchy:
-     * 
-     * {@link #drawHierarchy()} -> {@link #drawSecond()} -> {@link #drawThird()}
-     */
-    private void drawHierarchy() {
-        gl.glColor3d(gs.sliderC, gs.sliderD, gs.sliderE);
-        gl.glPushMatrix(); 
-            gl.glScaled(1, 0.5, 0.5);
-            glut.glutSolidCube(1);
-            gl.glScaled(1, 2, 2);
-            //gl.glTranslated(0.5, 0, 0);
-            gl.glRotated(gs.sliderA * -90.0, 0, 1, 0);
-            drawSecond();
-        gl.glPopMatrix();
-    }
-    
-    private void drawSecond() {
-        gl.glTranslated(0.5, 0, 0);
-        gl.glScaled(1, 0.5, 0.5);
-        glut.glutSolidCube(1);
-        gl.glScaled(1, 2, 2);
-//        gl.glTranslated(0.5, 0, 0);
-//        gl.glRotated(gs.sliderB * -90.0, 0, 1, 0);
-//        drawThird();
-    }
-    
-    private void drawThird() {
-        gl.glTranslated(0.5, 0, 0);
-        gl.glScaled(1, 0.5, 0.5);
-        glut.glutSolidCube(1);
-    }
-    
+
     
     /**
      * Main program execution body, delegates to an instance of
