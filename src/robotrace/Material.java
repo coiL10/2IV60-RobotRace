@@ -45,7 +45,7 @@ public enum Material {
     WOOD (  
         new float[] {0.6484375f, 0.40625f, 0.12890625f, 1.0f},
         new float[] {0.01f, 0.01f, 0.01f, 1.0f},
-        0.078f);
+        0.078f * 128);
   
     
     /** The diffuse RGBA reflectance of the material. */
