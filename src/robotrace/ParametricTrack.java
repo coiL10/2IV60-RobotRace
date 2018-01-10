@@ -5,6 +5,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES3;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
+import static robotrace.Textures.*;
 
 /**
  * Implementation of RaceTrack, creating a track from a parametric formula
@@ -20,35 +21,56 @@ public class ParametricTrack extends RaceTrack {
     public void draw(GL2 gl, GLU glu, GLUT glut) {
         Vector tangent = new Vector(0,0,0);
         double step = 0.002;
+        
         //draw lines
         for(double j= -2; j<NR_LANES-1; j++){
-                
+               
                 gl.glBegin(gl.GL_LINE_LOOP);
                 for(double i=0; i<1; i += step){
                     tangent = getTangent(i).cross(new Vector(0,0,1));
                     tangent.x = tangent.x*LANE_WIDTH;
                     tangent.y = tangent.y*LANE_WIDTH;
-                  
+                 
                     gl.glVertex3d(getPoint(i).x()+j*tangent.x,getPoint(i).y+j*tangent.y,getPoint(i).z);
                 }
                 gl.glEnd();
         }
+     
         
+        //enable texture
+        Textures.head.bind(gl);
+        ShaderPrograms.trackShader.setUniform(gl, "useTexture", 1);
+   
         //draw the track
         for(double j= -2; j<2; j++){
              gl.glBegin(gl.GL_TRIANGLE_STRIP);
 
              for(double i=0; i<=1 + 2*step; i = i+ 2*step){
-
+                 gl.glNormal3d(0, 0, 1);
                  tangent = getTangent(i).cross(new Vector(0,0,1));
                  tangent.x = tangent.x*LANE_WIDTH;
                  tangent.y = tangent.y*LANE_WIDTH;
-                 gl.glColor3f(0.5f, 0.0f, 1.0f);
+                 gl.glTexCoord2d(0,0);
                  gl.glVertex3d(getPoint(i).x+j*tangent.x,getPoint(i).y+j*tangent.y,getPoint(i).z);
+                 gl.glTexCoord2d(1,0);
                  gl.glVertex3d(getPoint(i).x+(j+1)*tangent.x,getPoint(i).y+(j+1)*tangent.y,getPoint(i).z);
-             }
-             gl.glEnd();
-         }
+                 
+                Vector b;                                                   //now we do the same again with vector b, this is done because the texture map needs four coordinates, thats why we increment i by 2*offset instead of offset
+                b = getTangent(i + step).cross(new Vector(0, 0, 1));     //again b is orthogonal to the centerline such that we can find the correct lane
+                b.normalized();
+                b.x = b.x * LANE_WIDTH;                                      //multiply by laneWidth    
+                b.y = b.y * LANE_WIDTH;
+                gl.glTexCoord2d(0, 1);                                                                                                      //set the third texture coordinate
+                gl.glVertex3d(getPoint(i + step).x + j * b.x, getPoint(i + step).y + j * b.y, getPoint(i + step).z);               //do the same as above, but increment i
+                gl.glTexCoord2d(1, 1);                                                                                                      //set the final coordinate for the texture
+                gl.glVertex3d(getPoint(i + step).x + (j + 1) * b.x, getPoint(i + step).y + (j + 1) * b.y, getPoint(i + step).z);   //do the same as above, but increment i
+  
+            }
+            gl.glEnd();
+        }
+        //Disable texture
+        ShaderPrograms.trackShader.setUniform(gl, "useTexture", 0);
+    
            
           //draw the sides
           for (int j = -2; j <= 2; j += 4) {                                  //only use lane curves -2 and 2, these represent the outside lanes
@@ -67,7 +89,7 @@ public class ParametricTrack extends RaceTrack {
                     b.x = b.x * LANE_WIDTH;
                     b.y = b.y * LANE_WIDTH;
                     gl.glVertex3d(getPoint(i + pOffset).x + j * b.x, getPoint(i + pOffset).y + j * b.y, getPoint(i + pOffset).z);       //set the vertex, at point i with offset and z
-                            gl.glVertex3d(getPoint(i + pOffset).x + j * b.x, getPoint(i + pOffset).y + j * b.y, getPoint(i + pOffset).z - 2);   //set final vertex at point i with offset and z-1
+                    gl.glVertex3d(getPoint(i + pOffset).x + j * b.x, getPoint(i + pOffset).y + j * b.y, getPoint(i + pOffset).z - 2);   //set final vertex at point i with offset and z-1
                 }
                 gl.glEnd();                                                     //finish the quad
             }
@@ -116,7 +138,6 @@ public class ParametricTrack extends RaceTrack {
             centerPos = centerPos.subtract(perpendicular.scale(LANE_WIDTH * (lane-3) + LANE_WIDTH/2.0));
         }
         return centerPos;
-        
 
     }
     

@@ -3,13 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/Textures.java</file>
             <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/Material.java</file>
-            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/shaderPrograms/Default/fragment.glsl</file>
             <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/Robot.java</file>
             <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/Camera.java</file>
             <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/</file>
-            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/shaderPrograms/Default/vertex.glsl</file>
+            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/BezierTrack.java</file>
+            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/ParametricTrack.java</file>
+            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/shaderPrograms/Robot/vertex.glsl</file>
             <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/RobotRace.java</file>
+            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/ShaderPrograms.java</file>
+            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/ShaderProgram.java</file>
+            <file>file:/C:/Users/andrei/Desktop/nav/RobotRace/src/robotrace/RaceTrack.java</file>
         </group>
     </open-files>
 </project-private>

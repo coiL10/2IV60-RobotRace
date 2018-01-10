@@ -131,11 +131,14 @@ public class RobotRace extends Base {
         
         // Track 2
         float g = 3.5f;
-        raceTracks[1] = new BezierTrack(
-                
-            new Vector[] {}
-       
-        );
+     
+        raceTracks[1] = new BezierTrack(new Vector[] { 
+            /* add control points */
+            new Vector(4, 5, 1), new Vector(4, 15, 1), new Vector(10, 15, 1), new Vector(10, 5, 1),
+            new Vector(10, 5, 1), new Vector(10, -9, 1), new Vector(9, -10, 1), new Vector(-5, -10, 1),
+            new Vector(-5, -10, 1), new Vector(-15, -10, 1), new Vector(-10, -6, 1), new Vector(-5, -6, 1),
+            new Vector(-5, -6, 1), new Vector(2, -6, 1), new Vector(4,-3, 1), new Vector(4, 5, 1)
+        });
         
         // Initialize the terrain
         terrain = new Terrain();
