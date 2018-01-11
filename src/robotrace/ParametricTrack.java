@@ -23,23 +23,23 @@ public class ParametricTrack extends RaceTrack {
         double step = 0.002;
         
         //draw lines
-        for(double j= -2; j<NR_LANES-1; j++){
-               
-                gl.glBegin(gl.GL_LINE_LOOP);
-                for(double i=0; i<1; i += step){
-                    tangent = getTangent(i).cross(new Vector(0,0,1));
-                    tangent.x = tangent.x*LANE_WIDTH;
-                    tangent.y = tangent.y*LANE_WIDTH;
-                 
-                    gl.glVertex3d(getPoint(i).x()+j*tangent.x,getPoint(i).y+j*tangent.y,getPoint(i).z);
-                }
-                gl.glEnd();
-        }
-     
+//        for(double j= -2; j<NR_LANES-1; j++){
+//               
+//                gl.glBegin(gl.GL_LINE_LOOP);
+//                for(double i=0; i<1; i += step){
+//                    tangent = getTangent(i).cross(new Vector(0,0,1));
+//                    tangent.x = tangent.x*LANE_WIDTH;
+//                    tangent.y = tangent.y*LANE_WIDTH;
+//                 
+//                    gl.glVertex3d(getPoint(i).x()+j*tangent.x,getPoint(i).y+j*tangent.y,getPoint(i).z);
+//                }
+//                gl.glEnd();
+//        }
+//     
         
         //enable texture
-        Textures.head.bind(gl);
-        ShaderPrograms.trackShader.setUniform(gl, "useTexture", 1);
+        Textures.track.bind(gl);
+//        ShaderPrograms.trackShader.setUniform(gl, "track", 1);
    
         //draw the track
         for(double j= -2; j<2; j++){
@@ -69,9 +69,9 @@ public class ParametricTrack extends RaceTrack {
             gl.glEnd();
         }
         //Disable texture
-        ShaderPrograms.trackShader.setUniform(gl, "useTexture", 0);
+//        ShaderPrograms.trackShader.setUniform(gl, "useTexture", 0);
     
-           
+//           
           //draw the sides
           for (int j = -2; j <= 2; j += 4) {                                  //only use lane curves -2 and 2, these represent the outside lanes
                 gl.glBegin(GL2ES3.GL_QUADS);                                           //this time quads are used, since the 4 points lay in the same plane

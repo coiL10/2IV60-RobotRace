@@ -318,7 +318,7 @@ public class RobotRace extends Base {
         gl.glUseProgram(trackShader.getProgramID());
         raceTracks[gs.trackNr].draw(gl, glu, glut);
         
-        // Draw the terrain.
+//         Draw the terrain.
         gl.glUseProgram(terrainShader.getProgramID());
         terrain.draw(gl, glu, glut);
         reportError("terrain:");

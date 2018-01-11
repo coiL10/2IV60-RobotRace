@@ -1,7 +1,8 @@
-uniform sampler2D useTexture;
+#version 120
+uniform sampler2D track;
 
 void main()
 {
-    vec4 color = texture2D(useTexture,gl_texCoord[0].st)
+    vec4 color = texture2D(track,gl_TexCoord[0].st);
     gl_FragColor = color;
 }
